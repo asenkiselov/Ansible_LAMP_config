@@ -1,0 +1,79 @@
+---
+- hosts: all
+  become: yes
+  gather_facts: no
+  tasks:
+  - yum:
+     name:
+       - libselinux-python
+       - libsemanage-python
+       - firewalld
+     state: installed
+- hosts: lamp-db
+  become: yes
+  gather_facts: no
+  tasks:
+  tasks:
+  - yum:
+     name:
+       - mariadb-server
+       - MySQL-python
+  - copy:
+     src: files/my.cnf
+     dest: /etc/my.cnf
+  -  service: name=mariadb state=started enabled=yes
+
+  - service: name=firewalld state=started enabled=yes
+
+  - firewalld: port={{ mysql_port }}/tcp permanent=true state=enabled immediate=yes
+
+  - name: Create Application Database
+    mysql_db: name={{ dbname }} state=present
+
+  - name: Create Database User
+    mysql_user: name={{ dbuser }} password={{ dbpassword }} host=172.20.1.100 priv='*.*:ALL' state=present
+
+  - name: Copy db-lead-script.sql to /tmp
+    copy:
+      src: files/db-load-script.sql
+      dest: /tmp/db-load-script.sql
+
+  - name: Load inventory data by running shell command
+    shell: mysql -f < /tmp/db-load-script.sql
+
+
+- name: Installing web service on web server
+  hosts: lamp-web
+  gather_facts: no
+  become: yes
+  tasks:
+  - name: INSTALL HTTPD php  php-mysql
+    yum:
+      name:
+        - httpd
+        - php
+        - php-mysql
+        - git
+      state: installed
+  - name: start firewalld service
+    service: name=firewalld state=started
+
+  - name: insert firewall rule for httpd
+    firewalld: port={{ httpd_port }}/tcp state=enabled permanent=yes
+
+  - name: replace index.php with index.html
+    replace:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: 'DirectoryIndex index.html'
+      replace: 'DirectoryIndex index.php'
+  - name: sevice httpd start
+    service: name=httpd state=started enabled=yes
+  - name: clone git repo
+    git:
+      repo: '{{ repository }}'
+      dest: /var/www/html/
+      force: yes
+  - name: copy the custom index.php
+    copy:
+      src: files/index.php
+      dest: /var/www/html/index.php
