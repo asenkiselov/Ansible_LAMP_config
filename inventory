@@ -1,0 +1,7 @@
+[db_servers]
+lamp-db
+
+[web_servers]
+lamp-web
+
+

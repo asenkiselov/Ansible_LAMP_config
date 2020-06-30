@@ -1,0 +1,23 @@
+---
+
+- name: Deploy lamp stack application
+  hosts: all
+  become: yes
+  tasks:
+  roles:
+    - common
+
+    # Install and Configure Database
+- name: Deploy lamp stack application
+  hosts: lamp-db
+  become: yes
+  tasks:
+  roles:
+    - mysql 
+
+- name: Deploy lamp stack application
+  hosts: lamp-web
+  become: yes
+  tasks:
+  roles:
+    - httpd-php
