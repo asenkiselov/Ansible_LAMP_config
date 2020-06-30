@@ -1,13 +1,5 @@
 <<<<<<< HEAD
 
-This playbook is based on:
-https://github.com/ansible/ansible-examples/tree/master/lamp_simple_rhel7
-
-``
-docker run --rm --privileged -p 5000:80 -v /sys/fs/cgroup:/sys/fs/cgroup:ro --name=lamp-1 --network ansible -d kodekloud/centos-ssh-enabled:master
-``
-
-Remember to set innodb buffer pool size low to reduce memory consumption
 
 =======
 >>>>>>> 702a87c15ab27650098d860ec452978429941132
