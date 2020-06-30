@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 This playbook is based on:
 https://github.com/ansible/ansible-examples/tree/master/lamp_simple_rhel7
@@ -8,6 +9,8 @@ docker run --rm --privileged -p 5000:80 -v /sys/fs/cgroup:/sys/fs/cgroup:ro --na
 
 Remember to set innodb buffer pool size low to reduce memory consumption
 
+=======
+>>>>>>> 702a87c15ab27650098d860ec452978429941132
 ## Tasks:
 
 #### Common
@@ -33,4 +36,7 @@ Remember to set innodb buffer pool size low to reduce memory consumption
 6. Start httpd service
 7. Download source code from repo
 8. Create index.php file from template.
+<<<<<<< HEAD
 
+=======
+>>>>>>> 702a87c15ab27650098d860ec452978429941132
